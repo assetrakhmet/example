@@ -1,17 +1,20 @@
-# Use Ubuntu as the base image
-FROM ubuntu:latest
+# Use Alpine Linux as the base image
+FROM node:14-alpine
 
-# Update the package lists
-RUN apt-get update
+# Set the working directory
+WORKDIR /app
 
-# Install Nginx
-RUN apt-get install -y nginx
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-# Copy Nginx configuration file
-COPY nginx.conf /etc/nginx/nginx.conf
+# Install dependencies
+RUN npm install
 
-# Expose port 80
-EXPOSE 80
+# Copy the rest of the application code
+COPY . .
 
-# Start Nginx in the foreground when the container starts
-CMD ["nginx", "-g", "daemon off;"]
+# Expose port 3000 (adjust as needed for your application)
+EXPOSE 3000
+
+# Command to run the application
+CMD ["npm", "start"]
